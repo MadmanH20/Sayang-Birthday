@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { background: transparent; }
+
+  .bday-wrap {
+    font-family: 'Lato', sans-serif;
+    background: #fdf6f9;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Floating petals */
+  .petals-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    top: -40px;
+    opacity: 0;
+    animation: fall linear infinite;
+    font-size: 18px;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(-40px) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 24px 40px;
+    background: linear-gradient(180deg, #ffe4f0 0%, #fdf6f9 100%);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c97a9f;
+    background: #fde8f3;
+    padding: 6px 18px;
+    border-radius: 40px;
+    border: 1px solid #f7c9e4;
+    margin-bottom: 24px;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 10vw, 88px);
+    font-weight: 400;
+    color: #a84d7a;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: #d47baa;
+  }
+
+  .hero-sub {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: #c08ca8;
+    letter-spacing: 1px;
+    margin-bottom: 36px;
+  }
+
+  .big-heart {
+    font-size: 64px;
+    display: block;
+    animation: heartbeat 1.4s ease-in-out infinite;
+    margin: 0 auto 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14%      { transform: scale(1.15); }
+    28%      { transform: scale(1); }
+    42%      { transform: scale(1.1); }
+    70%      { transform: scale(1); }
+  }
+
+  .heart-prompt {
+    font-size: 11px;
+    color: #d4a0bc;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* Countdown */
+  .countdown-section {
+    position: relative; z-index: 1;
+    background: #fff0f6;
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid #f5d5e8;
+    border-bottom: 1px solid #f5d5e8;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c97a9f;
+    margin-bottom: 20px;
+  }
+
+  .countdown-grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .cd-box {
+    background: #fff;
+    border: 1px solid #f5c9e2;
+    border-radius: 16px;
+    padding: 20px 24px;
+    min-width: 80px;
+  }
+
+  .cd-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: #b85888;
+    line-height: 1;
+    display: block;
+  }
+
+  .cd-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d4a0bc;
+    display: block;
+    margin-top: 6px;
+  }
+
+  .birthday-msg {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #b85888;
+    margin-top: 20px;
+    font-style: italic;
+  }
+
+  /* Reasons */
+  .reasons-section {
+    position: relative; z-index: 1;
+    padding: 50px 24px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .reasons-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #a84d7a;
+    margin-bottom: 8px;
+  }
+
+  .reasons-subtitle {
+    font-size: 13px;
+    color: #c9a0b9;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+  }
+
+  .reason-card {
+    background: #fff;
+    border: 1px solid #f5c9e2;
+    border-radius: 18px;
+    padding: 22px 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reason-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(180, 80, 140, 0.12);
+  }
+
+  .reason-card.revealed .reason-front { opacity: 0; }
+  .reason-card.revealed .reason-back { opacity: 1; }
+
+  .reason-front {
+    transition: opacity 0.3s;
+  }
+
+  .reason-back {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #ffe4f0, #fdf0f7);
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .reason-back p {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: #a84d7a;
+    line-height: 1.5;
+  }
+
+  .reason-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .reason-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: #c97a9f;
+    font-style: italic;
+  }
+
+  /* Gallery / memories */
+  .memories-section {
+    position: relative; z-index: 1;
+    background: #fff0f6;
+    padding: 50px 24px;
+    text-align: center;
+    border-top: 1px solid #f5d5e8;
+  }
+
+  .memories-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #a84d7a;
+    margin-bottom: 8px;
+  }
+
+  .memories-subtitle {
+    font-size: 13px;
+    color: #c9a0b9;
+    font-weight: 300;
+    margin-bottom: 36px;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .photo-slot {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: 2px dashed #f0b8d8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .photo-slot:hover {
+    border-color: #d47baa;
+    background: #fde8f3;
+  }
+
+  .photo-slot input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%; height: 100%;
+  }
+
+  .photo-slot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    display: none;
+  }
+
+  .photo-slot .slot-label {
+    font-size: 11px;
+    color: #d4a0bc;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .photo-slot .slot-icon {
+    font-size: 24px;
+    color: #f0b8d8;
+  }
+
+  /* Wish */
+  .wish-section {
+    position: relative; z-index: 1;
+    padding: 60px 24px;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .wish-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 4vw, 26px);
+    font-style: italic;
+    color: #a84d7a;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .wish-sig {
+    font-size: 13px;
+    color: #c9a0b9;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .dancing-stars {
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 28px 0;
+    animation: twinkle 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  
+  .music-btn{
+    position:fixed;right:20px;bottom:20px;z-index:999;
+    border:none;border-radius:999px;padding:14px 18px;
+    background:#d47baa;color:white;cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+  }
+  .love-letter-section,.timeline-section{
+    padding:50px 24px;text-align:center;max-width:800px;margin:auto;
+  }
+  .timeline-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:24px}
+  .timeline-card{background:#fff;border:1px solid #f5c9e2;border-radius:16px;padding:18px}
+  .memory-cover{max-width:700px;margin:0 auto 24px;background:#fff;border:2px solid #f5c9e2;border-radius:18px;padding:24px}
+
+
+  /* Footer */
+  .footer {
+    position: relative; z-index: 1;
+    background: #ffe4f0;
+    padding: 28px 24px;
+    text-align: center;
+    border-top: 1px solid #f5d5e8;
+  }
+
+  .footer p {
+    font-size: 13px;
+    color: #c9a0b9;
+    font-weight: 300;
+  }
+
+  .footer strong {
+    font-family: 'Playfair Display', serif;
+    color: #b85888;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* Burst hearts on click */
+  .burst-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 20px;
+    z-index: 9999;
+    animation: burst 0.9s ease-out forwards;
+  }
+
+  @keyframes burst {
+    0%   { transform: translate(-50%,-50%) scale(0); opacity: 1; }
+    60%  { opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.2); opacity: 0; }
+  }
+
+  .tap-hint {
+    font-size: 11px;
+    color: #d4a0bc;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    display: block;
+  }
+
+  /* =========================
+   Mobile Responsive
+   ========================= */
+@media (max-width: 768px) {
+
+  .hero {
+    padding: 40px 20px;
+  }
+
+  .hero-name {
+    font-size: 48px;
+    line-height: 1.1;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+  }
+
+  .big-heart {
+    font-size: 56px;
+  }
+
+  .reasons-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .timeline-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-card {
+    padding: 20px;
+  }
+
+  .wish-quote {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .music-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .hero-name {
+    font-size: 38px;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+  }
+
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reason-card {
+    padding: 18px;
+  }
+
+  .memories-title,
+  .reasons-title {
+    font-size: 24px;
+  }
+
+  .wish-quote {
+    font-size: 16px;
+  }
+
+  .footer p {
+    font-size: 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="bday-wrap" id="app">
+
+  <!-- Floating petals -->
+  <div class="petals-container" id="petals"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">✦ A special day ✦</div>
+    <h1 class="hero-name">Happy Birthday,<br><em>Asyqin</em></h1>
+    <p class="hero-sub">Wishing you all the joy in the world 🌷</p>
+    <span class="big-heart" id="bigHeart" title="Tap me!">🩷</span>
+    <span class="heart-prompt">tap the heart</span>
+  </section>
+
+  <!-- Reasons -->
+  <section class="reasons-section">
+    <h2 class="reasons-title">Reasons I love you</h2>
+    <p class="reasons-subtitle">Tap each card to reveal ✨</p>
+    <div class="reasons-grid" id="reasonsGrid"></div>
+    <span class="tap-hint" style="margin-top:18px;">You're my everything</span>
+  </section>
+
+  <!-- Photo memories -->
+  <section class="memories-section">
+    <h2 class="memories-title">Our little memories</h2>
+    <p class="memories-subtitle">Every Pictures tells a story 🌸</p>
+    <div class="photo-grid" id="photoGrid"></div>
+  </section>
+
+  <!-- Birthday wish -->
+  <section class="wish-section">
+    <div class="dancing-stars">🌸 🌷 🌸</div>
+    <p class="wish-quote">"To my Asyqin — may Allah bless u with everything that u dreamed of, and may this year be your most beautiful chapter yet."</p>
+    <p class="wish-sig">with all my love 🩷</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Made with love, just for <strong>Asyqin</strong> 🌸</p>
+  </footer>
+
+
+<button class="music-btn" id="musicBtn">🎵 Play Music</button>
+<audio id="bgMusic" loop>
+  <source src="music/risk.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<script>
+
+  const REASONS = [
+    { icon: "🌸", num: "01", back: "Your smile, laugh, personality and everything about u is so beautiful" },
+    { icon: "✨", num: "02", back: "My safe place" },
+    { icon: "🌷", num: "03", back: "How kind and gentle your heart is." },
+    { icon: "🍃", num: "04", back: "You always support the things that I love" },
+    { icon: "🌙", num: "05", back: "You're my favourite person to talk to at midnight." },
+    { icon: "💌", num: "06", back: "Everything you do is thoughtful and full of love." },
+  ];
+
+  // Render reason cards
+  const grid = document.getElementById('reasonsGrid');
+  REASONS.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'reason-card';
+    card.innerHTML = `
+      <div class="reason-front">
+        <span class="reason-icon">${r.icon}</span>
+        <span class="reason-num">${r.num}</span>
+      </div>
+      <div class="reason-back"><p>${r.back}</p></div>
+    `;
+    card.addEventListener('click', () => card.classList.toggle('revealed'));
+    grid.appendChild(card);
+  });
+
+  
+  // Photo slots - replace URLs below before sharing
+  const photoGrid = document.getElementById('photoGrid');
+  const MEMORY_IMAGES = [
+    'image/1.jpeg',
+    'image/2.jpeg',
+    'image/3.jpeg',
+    'image/4.jpeg',
+    'image/5.jpeg',
+    'image/6.jpeg'
+  ];
+  MEMORY_IMAGES.forEach((src,i)=>{
+    const slot=document.createElement('div');
+    slot.className='photo-slot';
+    slot.innerHTML=`<img src="${src}" style="display:block" alt="Memory ${i+1}">`;
+    photoGrid.appendChild(slot);
+  });
+
+  // Floating petals
+  const petalContainer = document.getElementById('petals');
+  const petalChars = ['🌸','🌷','🌺','✿','🫧','💮','🩷'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.textContent = petalChars[Math.floor(Math.random() * petalChars.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.fontSize = (12 + Math.random() * 16) + 'px';
+    petalContainer.appendChild(p);
+  }
+
+  // Heart burst on click
+  document.getElementById('bigHeart').addEventListener('click', function(e) {
+    burstHearts(e.clientX, e.clientY, 12);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (Math.random() < 0.4) burstHearts(e.clientX, e.clientY, 3);
+  });
+
+  function burstHearts(cx, cy, n) {
+    const emojis = ['🩷','💕','🌸','💗','💓','✨'];
+    for (let i = 0; i < n; i++) {
+      const h = document.createElement('span');
+      h.className = 'burst-heart';
+      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const angle = (Math.PI * 2 / n) * i + Math.random() * 0.5;
+      const dist = 60 + Math.random() * 80;
+      h.style.left = cx + 'px';
+      h.style.top = cy + 'px';
+      h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      h.style.setProperty('--dy', Math.sin(angle) * dist - 40 + 'px');
+      h.style.animationDelay = (Math.random() * 0.15) + 's';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 1100);
+    }
+  }
+  
+  const music=document.getElementById('bgMusic');
+  const musicBtn=document.getElementById('musicBtn');
+  musicBtn.addEventListener('click',()=>{
+    if(music.paused){music.play();musicBtn.textContent='⏸ Pause Music';}
+    else{music.pause();musicBtn.textContent='🎵 Play Music';}
+  });
+
+  function launchConfetti() {
+
+    burstHearts(window.innerWidth / 2, window.innerHeight / 2, 24);
+    setTimeout(() => burstHearts(window.innerWidth * 0.3, window.innerHeight * 0.3, 16), 300);
+    setTimeout(() => burstHearts(window.innerWidth * 0.7, window.innerHeight * 0.4, 16), 600);
+  }
+</script>
+
+</body>
+</html>
